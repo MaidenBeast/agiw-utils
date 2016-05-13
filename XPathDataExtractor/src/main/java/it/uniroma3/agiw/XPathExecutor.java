@@ -18,7 +18,7 @@ public class XPathExecutor {
 		
 		TagNode tagNode = new HtmlCleaner().clean(html);
 		try {
-			org.w3c.dom.Document doc = new DomSerializer(
+			Document doc = new DomSerializer(
 			        new CleanerProperties()).createDOM(tagNode);
 			
 			XPath xpathObj = XPathFactory.newInstance().newXPath();

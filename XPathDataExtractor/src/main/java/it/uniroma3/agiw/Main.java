@@ -29,7 +29,7 @@ public class Main {
 				+ "[-p|--page] <html-page> "
 				+ "[-x|--xpath] <xpath> |"
 				+ "[-t|--task] [executor] "
-				+ "[-s|--source-json] <source-json> "
+				+ "[-s|--sources-json] <source-json> "
 				+ "[-i|--in-json] <in-json> "
 				+ "[-o|--out-json] <out-json>";
 		
@@ -42,7 +42,7 @@ public class Main {
 				if (task.equals("tester") && cmd.hasOption("p") && cmd.hasOption("x")) {
 					program = new XPathTester(cmd.getOptionValue("page"), cmd.getOptionValue("xpath"));
 				} else if (task.equals("executor") && cmd.hasOption("i") && cmd.hasOption("o") && cmd.hasOption("s")) {
-					String sourceJson = cmd.getOptionValue("source-json");
+					String sourceJson = cmd.getOptionValue("sources-json");
 					String inJson = cmd.getOptionValue("in-json");
 					String outJson = cmd.getOptionValue("out-json");
 					program = new XPathDataExtractor(sourceJson, inJson, outJson);
@@ -50,7 +50,7 @@ public class Main {
 					System.err.println(PARSE_ERROR);
 					System.exit(1);
 				}
-					program.execute();
+				program.execute();
 			} else {
 				System.err.println(PARSE_ERROR);
 				System.exit(1);

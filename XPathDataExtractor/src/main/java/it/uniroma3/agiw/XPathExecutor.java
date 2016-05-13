@@ -29,10 +29,10 @@ public class XPathExecutor {
 
 	            if ((child instanceof CharacterData && !(child instanceof Comment))
 	            	|| child instanceof EntityReference) {
-	            	output.add(child.getNodeValue());
+	            	output.add(child.getNodeValue().trim());
 	            }
 	            else if (child.getNodeType() == Node.ELEMENT_NODE) {
-	            	output.add(child.getTextContent());
+	            	output.add(child.getTextContent().trim());
 	            }
 	        }
 		} catch (ParserConfigurationException e) {

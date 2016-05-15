@@ -11,10 +11,12 @@ import org.jsoup.nodes.Document;
 public class XPathTester implements XPathProgram {
 	private String htmlPage;
 	private String xpath;
+	private String[] strFunctions;
 	
-	public XPathTester(String htmlPage, String xpath) {
+	public XPathTester(String htmlPage, String xpath, String[] strFunctions) {
 		this.htmlPage = htmlPage;
 		this.xpath = xpath;
+		this.strFunctions = strFunctions;
 	}
 
 	public void execute() {
@@ -22,7 +24,7 @@ public class XPathTester implements XPathProgram {
 		try {
 			Document doc = Jsoup.connect(htmlPage).get();
 			String html = doc.html();
-			List<String> xpathResult = executor.executeXPath(html, this.xpath);
+			List<String> xpathResult = executor.executeXPath(html, this.xpath, this.strFunctions);
 			System.out.println(xpathResult);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

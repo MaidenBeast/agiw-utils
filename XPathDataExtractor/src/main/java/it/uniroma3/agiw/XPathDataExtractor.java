@@ -20,12 +20,14 @@ public class XPathDataExtractor implements XPathProgram {
 	private String inJson;
 	private String outJson;
 	private XPathExecutor executor;
+	private String[] strFunctions;
 	
-	public XPathDataExtractor(String sourceJson, String inJson, String outJson) {
+	public XPathDataExtractor(String sourceJson, String inJson, String outJson, String[] strFunctions) {
 		this.sourceJson = sourceJson;
 		this.inJson = inJson;
 		this.outJson = outJson;
 		this.executor = new XPathExecutor();
+		this.strFunctions = strFunctions;
 	}
 
 	public void execute() {
@@ -90,20 +92,27 @@ public class XPathDataExtractor implements XPathProgram {
 			JSONObject jsonObj = new JSONObject();
 			
 			String url = (String)urlObj;
-			String result = "";
+			//String result = "";
+			Object result = "";
 			Document doc;
 			try {
 				doc = Jsoup.connect(url).get();
 				String html = doc.html();
-				List<String> resultList = this.executor.executeXPath(html, rule);
-				if (resultList.size() > 0)
+				List<String> resultList = this.executor.executeXPath(html, rule, strFunctions);
+				if (resultList.size() == 1)
 					result = resultList.get(0);
+				else if (resultList.size() > 1)  {
+					JSONArray resultArr = new JSONArray();
+					for(String res : resultList)
+						resultArr.add(res);
+					result = resultArr;
+				}
 			} catch (IOException | XPathExpressionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			jsonObj.put(url, result);
+			jsonObj.put(url.replace("\\", ""), result);
 			outArr.add(jsonObj);
 			System.out.println(jsonObj);
 		}

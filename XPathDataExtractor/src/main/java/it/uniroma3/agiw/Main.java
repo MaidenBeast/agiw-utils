@@ -1,5 +1,8 @@
 package it.uniroma3.agiw;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -36,16 +39,20 @@ public class Main {
 		try {
 			cmd = parser.parse(options, args);
 			
+			Properties prop = new Properties();
+			prop.load(Main.class.getResourceAsStream("/string-functions.properties"));
+			String[] strFunctions = prop.get("string-functions").toString().split("#");
+			
 			if (cmd.hasOption("t")) {
 				String task = cmd.getOptionValue("task");
 				
 				if (task.equals("tester") && cmd.hasOption("p") && cmd.hasOption("x")) {
-					program = new XPathTester(cmd.getOptionValue("page"), cmd.getOptionValue("xpath"));
+					program = new XPathTester(cmd.getOptionValue("page"), cmd.getOptionValue("xpath"), strFunctions);
 				} else if (task.equals("executor") && cmd.hasOption("i") && cmd.hasOption("o") && cmd.hasOption("s")) {
 					String sourceJson = cmd.getOptionValue("sources-json");
 					String inJson = cmd.getOptionValue("in-json");
 					String outJson = cmd.getOptionValue("out-json");
-					program = new XPathDataExtractor(sourceJson, inJson, outJson);
+					program = new XPathDataExtractor(sourceJson, inJson, outJson, strFunctions);
 				} else {
 					System.err.println(PARSE_ERROR);
 					System.exit(1);
@@ -57,6 +64,9 @@ public class Main {
 			}
 			
 		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
